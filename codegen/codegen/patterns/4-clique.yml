@@ -1,0 +1,5 @@
+pattern:
+  name: 4-clique
+  edges: [AB, AC, AD, BC, BD, CD]
+  orientation: [AB, BC, CD]
+  order: ABCD

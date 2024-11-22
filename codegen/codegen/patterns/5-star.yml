@@ -1,0 +1,5 @@
+pattern:
+  name: 5-star
+  edges: [AB, AC, AD, AE]
+  orientation: [BC, CD, DE]
+  order: ABCDE

@@ -1,0 +1,5 @@
+pattern:
+  name: 4-cycle
+  edges: [AB, BC, CD, AD]
+  orientation: [AB, AC, BD]
+  order: ABCD

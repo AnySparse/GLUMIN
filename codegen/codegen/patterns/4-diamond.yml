@@ -1,0 +1,5 @@
+pattern:
+  name: 4-diamond
+  edges: [AB, AC, AD, BC, CD]
+  orientation: [AC, BD]
+  order: ABCD

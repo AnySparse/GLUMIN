@@ -1,0 +1,5 @@
+pattern:
+  name: 5-double-triangle
+  edges: [AB, AC, BC, AD, AE, DE]
+  orientation: [BC, DE, BD]
+  order: ABCDE

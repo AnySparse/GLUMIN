@@ -1,0 +1,5 @@
+pattern:
+  name: 4-star
+  edges: [AB, AC, AD]
+  orientation: [BC, CD]
+  order: ABCD

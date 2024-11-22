@@ -1,0 +1,5 @@
+pattern:
+  name: 4-path
+  edges: [AB, BC, CD]
+  orientation: []
+  order: ABCD

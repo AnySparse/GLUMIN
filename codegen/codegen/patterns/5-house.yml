@@ -1,0 +1,5 @@
+pattern:
+  name: 5-house
+  edges: [AB, AC, BC, BD, DE, CE]
+  orientation: [BC]
+  order: BCEAD

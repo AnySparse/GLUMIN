@@ -1,0 +1,5 @@
+pattern:
+  name: 4-tailed-triangle
+  edges: [AB, AC, BC, AD]
+  orientation: [BC]
+  order: ABCD

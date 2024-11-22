@@ -1,0 +1,5 @@
+pattern:
+  name: 5-tailed-square
+  edges: [AB, BC, CD, AD, AE]
+  orientation: [BD]
+  order: ABCDE

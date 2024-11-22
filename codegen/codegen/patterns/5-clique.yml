@@ -1,0 +1,5 @@
+pattern:
+  name: 5-clique
+  edges: [AB, AC, AD, AE, BC, BD, BE, CD, CE, DE]
+  orientation: [AB, BC, CD, DE]
+  order: ABCDE

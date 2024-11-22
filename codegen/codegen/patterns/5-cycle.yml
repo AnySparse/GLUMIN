@@ -1,0 +1,5 @@
+pattern:
+  name: 5-cycle
+  edges: [AB, BC, CD, DE, AE]
+  orientation: [AB, AC, BD, CE]
+  order: ABCDE

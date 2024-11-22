@@ -1,0 +1,5 @@
+pattern:
+  name: 3-path
+  edges: [AB, BC]
+  orientation: []
+  order: ABC

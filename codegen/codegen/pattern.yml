@@ -1,0 +1,4 @@
+pattern:
+  edges: [AB, AC, AD, CD]
+  orientation: [CD]
+  order: CABD

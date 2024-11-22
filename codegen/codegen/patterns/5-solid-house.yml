@@ -1,0 +1,5 @@
+pattern:
+  name: 5-solid-house
+  edges: [AB, AC, BC, BD, BE, CD, CE, DE]
+  orientation: [BC, DE]
+  order: BCADE

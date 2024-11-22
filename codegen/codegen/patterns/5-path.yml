@@ -1,0 +1,5 @@
+pattern:
+  name: 5-path
+  edges: [AB, BC, CD, DE]
+  orientation: []
+  order: ABCDE
