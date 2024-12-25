@@ -407,7 +407,7 @@ class Instruction:
         elif self.operation == ".B":
             return f"@{self.buffer_id} = {self.operand}{self.operation}()"
         elif self.operation == "vid":
-            return f"v{str(self.operand).split("_")[0]} = {self.operation}(v{self.operand})"
+            return f"v{str(self.operand).split('_')[0]} = {self.operation}(v{self.operand})"
 
     def code(self):
         operation = self.operation_map[self.operation]
@@ -426,7 +426,7 @@ class Instruction:
             operand = f"{self.operand.code()}, /*bitmap_id=*/{self.buffer_id}"
             return f"{operation}({common}, {operand});"
         elif self.operation == "vid":
-            return f"auto v{str(self.operand).split("_")[0]} = {operation}({common}, v{self.operand.code()});"
+            return f"auto v{str(self.operand).split('_')[0]} = {operation}({common}, v{self.operand.code()});"
 
 class NOP:
     def __init__(self):
