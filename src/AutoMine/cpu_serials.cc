@@ -28,7 +28,7 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
   {
     num_threads = omp_get_num_threads();
   }
-  std::cout << "OpenMP " << k << "-listing (" << num_threads << " threads)\n";
+  std::cout << "OpenMP " << "pattern listing (" << num_threads << " threads)\n";
   
   g.init_edgelist();
 
@@ -112,9 +112,13 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
     std::cout << "P20 Automine\n"; 
     BS_vertex_5anti_tailed_diamond(g, meta, accum[0]);
   }
+  else {
+    std::cout << "Not supported right now\n";
+  }
   double run_time = omp_get_wtime() - start_time;
   t.Stop();
-  std::cout << "runtime [omp_base] = " << run_time << " sec  " << accum[0] <<"\n";
+  if (k == 2 || k == 8 || k == 11 || k == 16 || k == 14 || k == 21) std::cout << "runtime [Automine] = " << run_time << " sec\n";
+  else std::cout << "runtime [Automine + LUT] = " << run_time << " sec\n";
   return;
 }
 

@@ -24,9 +24,10 @@ int main(int argc, char *argv[]) {
   std::cout << "P" << k << "(only for undirected graphs)\n";
   std::string use_lut;
   if (argc > 3) use_lut = argv[3];
-  if (use_lut != "lut") k = k + 1;
+  int k_num = k;
+  if (use_lut != "lut") k_num = k + 1;
   
-  if (k == 5 || k == 6) {
+  if (k_num == 5 || k_num == 6) {
     Graph g(argv[1], USE_DAG); // use DAG
     int n_devices = 8;
     int chunk_size = 1024;
@@ -38,8 +39,8 @@ int main(int argc, char *argv[]) {
     g.print_meta_data();
   
     uint64_t total = 0;
-    CliqueSolver(g, k, total, select_device, n_devices);
-    std::cout << "pattern 0: " << total << "\n";
+    CliqueSolver(g, k_num, total, select_device, n_devices);
+    std::cout << "Pattern P" << k << " count: " << total << "\n";
   }
   else {
     Graph g(argv[1]);
@@ -52,9 +53,9 @@ int main(int argc, char *argv[]) {
     int num_patterns = 1;
     std::cout << "num_patterns: " << num_patterns << "\n";
     std::vector<uint64_t> total(num_patterns, 0);
-    PatternSolver(g, k, total, n_devices, chunk_size);
+    PatternSolver(g, k_num, total, n_devices, chunk_size);
     for (int i = 0; i < num_patterns; i++)
-      std::cout << "pattern " << i << ": " << total[i] << "\n";
+      std::cout << "Pattern P" << k << " count: " << total[i] << "\n";
     return 0;
   }
 }

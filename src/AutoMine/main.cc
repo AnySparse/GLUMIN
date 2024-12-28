@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
   std::vector<uint64_t> total(num_patterns, 0);
   PatternSolver(g, k, total, n_devices, chunk_size);
   for (int i = 0; i < num_patterns; i++)
-    std::cout << "pattern " << i << ": " << total[i] << "\n";
+    std::cout << "Pattern P" << k << " count: " << total[i] << "\n";
   return 0;
 }
 

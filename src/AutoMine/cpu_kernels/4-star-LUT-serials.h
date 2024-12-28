@@ -4,9 +4,9 @@ void LUT_4star(Graph &g, StorageMeta &meta, uint64_t &total)
 {
 
   uint64_t counter = 0;
-  Timer t;
+  // Timer t;
 
-  t.Start();
+  // t.Start();
    auto candidate_v0 = __get_vlist_from_heap(g, meta, /*slot_id=*/-1);
   for(vidType v0_idx = 0; v0_idx < candidate_v0.size(); v0_idx += 1){ /*add begin end!!!*/
     auto v0 = candidate_v0[v0_idx];
@@ -25,8 +25,8 @@ void LUT_4star(Graph &g, StorageMeta &meta, uint64_t &total)
     // printf("counter:%ld\n",counter);
     // if(v0_idx>=10) break;
   }
-  t.Stop();
-  printf("==Serial LUT:%.4f sec counter:%ld\n", t.Seconds(), counter);
+  // t.Stop();
+  // printf("==Serial LUT:%.4f sec counter:%ld\n", t.Seconds(), counter);
 
   total = counter;
 }

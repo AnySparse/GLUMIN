@@ -82,7 +82,7 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
   nblocks = std::min(6*max_blocks, nblocks);
 
   nblocks = 640;
-  std::cout << "CUDA " << k << "-pattern listing (" << nblocks << " CTAs, " << nthreads << " threads/CTA)\n";
+  std::cout << "CUDA pattern listing (" << nblocks << " CTAs, " << nthreads << " threads/CTA)\n";
   size_t list_size = nblocks * per_block_vlist_size;
   std::cout << "frontier list size: " << list_size/(1024*1024) << " MB\n";
   vidType *frontier_list; // each warp has (k-3) vertex sets; each set has size of max_degree
@@ -111,7 +111,7 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
   vidType vid_warp_size = vid_warp.size();
   vidType vid_block_size = vid_block.size();
   vidType vid_global_size = vid_global.size();
-  std::cout << "warp_task: " << vid_warp_size << " block_task: " << vid_block_size << " global_task: " << vid_global_size << "\n";
+  // std::cout << "warp_task: " << vid_warp_size << " block_task: " << vid_block_size << " global_task: " << vid_global_size << "\n";
   vidType *d_vid_warp;
   CUDA_SAFE_CALL(cudaMalloc((void **)&d_vid_warp, vid_warp_size * sizeof(vidType)));
   CUDA_SAFE_CALL(cudaMemcpy(d_vid_warp, vid_warp.data(), vid_warp_size * sizeof(vidType), cudaMemcpyHostToDevice));
@@ -215,7 +215,7 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
   t.Stop();
 
 
-  std::cout << "runtime [cuda_base] = " << t.Seconds() << " sec\n";
+  std::cout << "runtime [G2Miner] = " << t.Seconds() << " sec\n";
   CUDA_SAFE_CALL(cudaFree(d_counts));
 }
 
@@ -226,7 +226,8 @@ void CliqueSolver(Graph &g, int k, uint64_t &total, int, int) {
   eidType ne = g.num_edges();
   auto md = g.get_max_degree();
   size_t mem_graph = size_t(nv+1)*sizeof(eidType) + size_t(2)*size_t(ne)*sizeof(vidType);
-  std::cout << "GPU_total_mem = " << memsize << " graph_mem = " << mem_graph << "\n";
+  std::cout << "GPU_total_mem = " << memsize/1024/1024/1024
+            << " GB, graph_mem = " << mem_graph/1024/1024 << " MB\n";
   if (memsize < mem_graph) std::cout << "Graph too large. Unified Memory (UM) required\n";
 
   GraphGPU gg(g);
@@ -251,7 +252,7 @@ void CliqueSolver(Graph &g, int k, uint64_t &total, int, int) {
 
   nblocks = std::min(16*max_blocks, nblocks);  
   
-  std::cout << "CUDA " << k << "-clique listing/counting (" << nblocks << " CTAs, " << nthreads << " threads/CTA)\n";
+  std::cout << "CUDA clique listing/counting (" << nblocks << " CTAs, " << nthreads << " threads/CTA)\n";
   size_t list_size = nblocks * per_block_vlist_size;
   std::cout << "frontier list size: " << list_size/(1024*1024) << " MB\n";
   vidType *frontier_list; // each warp has (k-3) vertex sets; each set has size of max_degree
@@ -283,7 +284,7 @@ void CliqueSolver(Graph &g, int k, uint64_t &total, int, int) {
   CUDA_SAFE_CALL(cudaDeviceSynchronize());
   t.Stop();
 
-  std::cout << "runtime [cuda_base] = " << t.Seconds() << " sec\n";
+  std::cout << "runtime [G2Miner] = " << t.Seconds() << " sec\n";
   CUDA_SAFE_CALL(cudaMemcpy(&h_total, d_total, sizeof(AccType), cudaMemcpyDeviceToHost));
   total = h_total;
   CUDA_SAFE_CALL(cudaFree(d_total));

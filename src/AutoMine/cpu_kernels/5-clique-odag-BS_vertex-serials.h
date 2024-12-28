@@ -4,8 +4,8 @@ void BS_vertex_5clique(Graph &g, StorageMeta &meta, uint64_t &total)
 {
 
   uint64_t counter = 0;
-  Timer t;
- t.Start();
+//   Timer t;
+//  t.Start();
 {
   auto candidate_v0 = __get_vlist_from_heap(g, meta, /*slot_id=*/-1);
   for(vidType v0_idx = 0; v0_idx < candidate_v0.size(); v0_idx += 1){
@@ -27,8 +27,8 @@ void BS_vertex_5clique(Graph &g, StorageMeta &meta, uint64_t &total)
     }
   }
   }
-  t.Stop();
-  printf("==Serial GEN-CPU:%.4f sec counter:%d\n",t.Seconds(), counter);
+  // t.Stop();
+  // printf("==Serial GEN-CPU:%.4f sec counter:%d\n",t.Seconds(), counter);
  
   total = counter;
 }

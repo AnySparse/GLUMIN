@@ -65,7 +65,7 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
   CUDA_SAFE_CALL(cudaGetDeviceProperties(&deviceProp, 0));
 
   nblocks = 640;
-  std::cout << "CUDA " << k << "-pattern listing (" << nblocks << " CTAs, " << nthreads << " threads/CTA)\n";
+  std::cout << "CUDA pattern listing (" << nblocks << " CTAs, " << nthreads << " threads/CTA)\n";
   size_t list_size = nblocks * per_block_vlist_size;
   std::cout << "frontier list size: " << list_size/(1024*1024) << " MB\n";
   vidType *frontier_list; // each warp has (k-3) vertex sets; each set has size of max_degree
@@ -95,7 +95,7 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
   t.Start();
   // LUT vertex
   if (k == 1) {
-    std::cout << "P1 GF LUT\n";
+    std::cout << "P1 GraphFold LUT\n";
     P1_GF_LUT_warp<<<nblocks, nthreads>>>(0, nv, gg, frontier_list, frontier_bitmap, md, d_counts, G_INDEX, lut_manager);
     lut_manager.recreate(nblocks, BLOCK_LIMIT, BLOCK_LIMIT);
     P1_GF_LUT_block<<<nblocks, nthreads>>>(0, nv, gg, frontier_list, frontier_bitmap, md, d_counts, G_INDEX1, lut_manager);
@@ -112,28 +112,28 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
   }
   // BS Edge
   else if (k == 2){
-    std::cout << "P1 GF\n";
+    std::cout << "P1 GraphFold\n";
     P1_frequency_count<<<nblocks, nthreads>>>(nv, gg, frontier_list, md, d_counts, G_INDEX);
     P1_count_correction<<<nblocks, nthreads>>>(ne, gg, frontier_list, md, d_counts, G_INDEX2);
   }
   else if (k == 10) {
-    std::cout << "P10 GF LUT edge\n";
+    std::cout << "P10 GraphFold LUT\n";
     P3_GF_LUT_warp_edge<<<nblocks, nthreads>>>(0, ne, gg, frontier_list, frontier_bitmap, md, d_counts, G_INDEX, lut_manager);
     lut_manager.recreate(500, md, md);
     P3_GF_LUT_block_edge<<<500, nthreads>>>(0, ne, gg, frontier_list, frontier_bitmap, md, d_counts, G_INDEX3, lut_manager);
   }
     else if (k == 11) {
-    std::cout << "P10 GF\n";
+    std::cout << "P10 GraphFold\n";
     P3_fused_matching<<<nblocks, nthreads>>>(ne, gg, frontier_list, md, d_counts, G_INDEX);
   }
   else if (k == 13) {
-    std::cout << "P13 GF LUT\n";
+    std::cout << "P13 GraphFold LUT\n";
     P7_GF_LUT_warp<<<nblocks, nthreads>>>(0, ne, gg, frontier_list, frontier_bitmap, md, d_counts, G_INDEX, lut_manager);
     lut_manager.recreate(500, md, md);
     P7_GF_LUT_block<<<500, nthreads>>>(0, ne, gg, frontier_list, frontier_bitmap, md, d_counts, G_INDEX3, lut_manager);
   }
   else if (k == 14) {
-    std::cout << "P13 GF\n";
+    std::cout << "P13 GraphFold\n";
     P7_fused_matching<<<nblocks, nthreads>>>(ne, gg, frontier_list, md, d_counts, G_INDEX);
   }
   else {
@@ -145,7 +145,8 @@ void PatternSolver(Graph &g, int k, std::vector<uint64_t> &accum, int, int) {
   // accum[0] = h_counts[1];
   t.Stop();
 
-  std::cout << "runtime [cuda_base] = " << t.Seconds() << " sec\n";
+  if (k == 2 || k == 11 || k == 14) std::cout << "runtime [GraphFold] = " << t.Seconds() << " sec\n";
+  else std::cout << "runtime [GraphFold + LUT] = " << t.Seconds() << " sec\n";
   CUDA_SAFE_CALL(cudaFree(d_counts));
 }
 
@@ -175,13 +176,13 @@ void CliqueSolver(Graph &g, int k, uint64_t &total, int test_edge, int) {
   int max_blocks_per_SM = maximum_residency(clique5_warp_edge_taskallocate, nthreads, 0);
   double clock_rate = deviceProp.clockRate;
 
-  std::cout << k << "-clique max_blocks_per_SM = " << max_blocks_per_SM << "\n";
+  std::cout << "max_blocks_per_SM = " << max_blocks_per_SM << "\n";
   size_t max_blocks = max_blocks_per_SM * deviceProp.multiProcessorCount;
 
   nblocks = std::min(max_blocks, nblocks);
   // nblocks = 640;
   
-  std::cout << "CUDA " << k << "-clique listing/counting (" << nblocks << " CTAs, " << nthreads << " threads/CTA)\n";
+  std::cout << "CUDA clique listing/counting (" << nblocks << " CTAs, " << nthreads << " threads/CTA)\n";
   size_t list_size = nblocks * per_block_vlist_size;
   std::cout << "frontier list size: " << list_size/(1024*1024) << " MB\n";
   vidType *frontier_list; // each warp has (k-3) vertex sets; each set has size of max_degree
@@ -199,16 +200,16 @@ void CliqueSolver(Graph &g, int k, uint64_t &total, int test_edge, int) {
   CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
   BinaryEncode<> sub_graph(nblocks * nwarps, md, md);
-  printf("Sum Warp: %d!!!\n", nblocks * nwarps);
+  // printf("Sum Warp: %d!!!\n", nblocks * nwarps);
 
   Timer t;
   t.Start();
   if (k == 5) {
-    std::cout << "P5 GF + LUT\n";
+    std::cout << "P5 GraphFold + LUT\n";
     clique5_warp_edge_taskallocate<<<nblocks, nthreads>>>(ne, gg, frontier_list, md, d_total, sub_graph, d_allocator);
   }
   else if (k == 6) {
-    std::cout << "P5 GF\n";
+    std::cout << "P5 GraphFold\n";
     clique5_GF<<<nblocks, nthreads>>>(ne, gg, frontier_list, md, d_total, sub_graph, d_allocator);
   }
   else {
@@ -217,7 +218,8 @@ void CliqueSolver(Graph &g, int k, uint64_t &total, int test_edge, int) {
   CUDA_SAFE_CALL(cudaDeviceSynchronize());
   t.Stop();
 
-  std::cout << "runtime [cuda_base] = " << t.Seconds() << " sec\n";
+  if (k == 6) std::cout << "runtime [GraphFold] = " << t.Seconds() << " sec\n";
+  else std::cout << "runtime [GraphFold + LUT] = " << t.Seconds() << " sec\n";
   CUDA_SAFE_CALL(cudaMemcpy(&h_total, d_total, sizeof(AccType), cudaMemcpyDeviceToHost));
   total = h_total;
   CUDA_SAFE_CALL(cudaFree(d_total));

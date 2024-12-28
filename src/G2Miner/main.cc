@@ -26,8 +26,9 @@ int main(int argc, char *argv[]) {
 
   if (k == 4 || k == 5 || k == 23 || k == 24) {
     Graph g(argv[1], USE_DAG); // use DAG
-    if (k == 23) k = 6;
-    if (k == 24) k = 7;
+    int k_num = k;
+    if (k == 23) k_num = 6;
+    if (k == 24) k_num = 7;
     int n_devices = 1;
     int chunk_size = 1024;
     int select_device = 3;
@@ -38,8 +39,8 @@ int main(int argc, char *argv[]) {
     g.print_meta_data();
   
     uint64_t total = 0;
-    CliqueSolver(g, k, total, select_device, n_devices);
-    std::cout << "num_" << k << "-cliques : " << total << "\n";
+    CliqueSolver(g, k_num, total, select_device, n_devices);
+    std::cout << "Pattern P" << k << " count: " << total << "\n";
   }
   else {
     Graph g(argv[1]);
@@ -47,15 +48,15 @@ int main(int argc, char *argv[]) {
     int chunk_size = 1024;
     if (argc > 3) n_devices = atoi(argv[3]);
     if (argc > 4) chunk_size = atoi(argv[4]);
-    std::cout << "P " << k << "\n";
+    std::cout << "P" << k << "\n";
     g.print_meta_data();
   
     int num_patterns = 1;
-    std::cout << "num_patterns: " << num_patterns << "\n";
+    // std::cout << "num_patterns: " << num_patterns << "\n";
     std::vector<uint64_t> total(num_patterns, 0);
     PatternSolver(g, k, total, n_devices, chunk_size);
     for (int i = 0; i < num_patterns; i++)
-      std::cout << "pattern " << i << ": " << total[i] << "\n";
+      std::cout << "Pattern P" << k << " count: " << total[i] << "\n";
   }
   return 0;
 }

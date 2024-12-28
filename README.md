@@ -66,7 +66,7 @@ Codegen source: `codegen/*`
 Codegen pattern yml example: `codegen/codegen/patterns`  
 Codegen kernel example: `codegen/include/generated/generated.cuh`
 
-## Codegen from 4-star.yml (P1) and Test
+### Codegen from 4-star.yml (P1) and Test
 + Codegen LUT kernel(build LUT in Level 1)
 ```
 cd scripts && ./codegen.sh 1
@@ -74,4 +74,54 @@ cd scripts && ./codegen.sh 1
 + Make and run
 ```
 cd .. && make && cd scripts && ./run.sh
+```
+
+# 3. Reproduce the major results form paper
+
+## 3.1 Compare with G<sup>2</sup>Miner. (The runtime table of G<sup>2</sup>Miner vs. G<sup>2</sup>Miner + LUT)
+
+```
+mkdir log
+./run_G2Miner.sh
+```
+
+> Note that the runtime results table of G<sup>2</sup>Miner vs G<sup>2</sup>Miner + LUT can be found at `log/G2Miner_summary_table.log`. All execution output can be found at `log/G2Miner_output.log`.
+> Test datasets and patterns can be set in `run_G2Miner.sh`.
+
+```
+## run_G2Miner.sh
+datasets=(mico)  # Dataset list
+patterns=(P1 P2 P5 P6)  # Test pattern list
+```
+
+## 3.2 Compare with GraphFold. (The runtime table of GraphFold vs. GraphFold + LUT)
+
+```
+mkdir log
+./run_GraphFold.sh
+```
+
+> Note that the runtime results table of GraphFold vs GraphFold + LUT can be found at `log/GraphFold_summary_table.log`. All execution output can be found at `log/GraphFold_output.log`.
+> Test datasets and patterns can be set in `run_GraphFold.sh`.
+
+```
+## run_GraphFold.sh
+datasets=(mico)  # Dataset list
+patterns=(P1 P5 P10 P13)  # Test pattern list
+```
+
+## 3.3 Compare with AutoMine. (The runtime table of AutoMine vs. AutoMine + LUT)
+
+```
+mkdir log
+./run_AutoMine.sh
+```
+
+> Note that the runtime results table of AutoMine vs AutoMine + LUT can be found at `log/AutoMine_summary_table.log`. All execution output can be found at `log/AutoMine_output.log`.
+> Test datasets and patterns can be set in `run_AutoMine.sh`.
+
+```
+## run_AutoMine.sh
+datasets=(mico)  # Dataset list
+patterns=(P1 P7 P10 P13 P15 P20)  # Test pattern list
 ```
